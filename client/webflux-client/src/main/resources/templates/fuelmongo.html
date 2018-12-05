@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/webjars/highcharts/5.0.8/css/highcharts.css"/>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Spring WebFlux</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/fuel">Genereted Data</a></li>
+                <li class="active"><a href="/fuelmongo">Mongo Data</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container wrapper">
+    <div id="chart" style="height: 400px; min-width: 310px"></div>
+</div>
+<script type="text/javascript" src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/highcharts/5.0.8/highcharts.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var chart = new Highcharts.chart('chart', {
+        title: {
+            text: 'Fuel prices'
+        },
+        yAxis: {
+            title: {
+                text: 'Fuel price'
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        xAxis: {
+            type: 'datetime',
+        },
+        series: [{
+            name: 'PB95',
+            data: []
+        }, {
+            name: 'PB98',
+            data: []
+        }, {
+            name: 'LPG',
+            data: []
+        }, {
+            name: 'ON',
+            data: []
+        }]
+
+    });
+    var appendStockData = function (fuel) {
+        chart.series
+            .filter(function (serie) {
+                return serie.name === fuel.name
+            })
+            .forEach(function (serie) {
+                var shift = serie.data.length > 9;
+                serie.addPoint([fuel.name, fuel.price], true, shift);
+            });
+    }
+    var	tableArray=[];
+    var stockEventSource = new EventSource("/rest/mongodata/fuel/event");
+    stockEventSource.addEventListener('message', function(e){
+      var data = JSON.parse(event.data);
+        if (tableArray.indexOf(data.id) === -1) {
+          tableArray.push(data.id);
+          appendStockData(data);
+        }
+    })
+</script>
+</body>
+</html>

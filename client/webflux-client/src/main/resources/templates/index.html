@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Spring WebFlux</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/fuel">Genereted Data</a></li>
+                <li><a href="/fuelmongo">Mongo Data</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div style="text-align: center; font-size: 5vh">Example use Spring Webflux</div>
+<div class="normalCenter">
+   1. Go to the "Genereted Data" page to see the action using the generated data from the resource:
+    http://localhost:9081/rest/generateddata/fuel/event</div>
+
+<div class="normalCenter">
+    2. Go to the "Mongo Data" page to see the action using the Mongo database data from the resource:
+    http://localhost:9081/rest/mongodata/fuel/event</div>
+<div class="normalCenter">Before you go to the "Mongo Data" page, add several data documents in the Postman as follows:</div>
+<div class="normalCenter">
+    <br>
+    [
+    {
+    "name": "PB95",
+    "price": 4.11,
+    "time": {{$timestamp}}
+    },
+    <br>
+    {
+    "name": "PB98",
+    "price": 4.32,
+    "time": {{$timestamp}}
+    },
+    <br>
+    {
+    "name": "ON",
+    "price": 4.55,
+    "time": {{$timestamp}}
+    },
+    <br>
+    {
+    "name": "LPG",
+    "price": 2.36,
+    "time": {{$timestamp}}
+    }
+    ]
+</div>
+<br>
+<div class="normalCenter">Add different prices for different values</div>
+<div class="normalCenter">resource: localhost:9081/rest/fuel/addAll</div>
+<br>
+<div class="normalCenter">If you have already added several documents, go to the "Mongo Data" page</div>
+<br>
+<div class="normalCenter">After going to the page, wait a moment for the chart to be drawn and then add further documents using the resource: localhost:9081/rest/fuel/addAll</div>
+
+<style>
+    .normalCenter {
+        text-align: center;
+        font-size: 3vh;
+    }
+</style>
+
+<script type="text/javascript" src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
